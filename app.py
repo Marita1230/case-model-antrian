@@ -20,15 +20,20 @@ def model_antrian():
             lmbda = st.slider("Tingkat Kedatangan (λ - mobil/jam)", 1, 100, 30)
             mu = st.slider("Tingkat Pelayanan (μ - mobil/jam)", 1, 100, 35)
 
-            with st.expander("Penjelasan Rumus Model: Antrian M/M/1"):
+            with st.expander("📘 Penjelasan Rumus Antrian M/M/1"):
                 st.markdown("""
-                Model antrian M/M/1 digunakan untuk menganalisis sistem dengan satu server (pelayan).  
-                Model ini membantu memahami metrik kinerja utama:
-                - Utilisasi (ρ): Seberapa sibuk server.  
-                - Panjang Antrian (L, Lq): Rata-rata jumlah pelanggan di sistem dan di antrian.  
-                - Waktu Tunggu (W, Wq): Lama rata-rata pelanggan di sistem dan dalam antrian.  
+                Model antrian *M/M/1* digunakan untuk sistem dengan satu server dan waktu antar-kedatangan serta pelayanan yang acak (Poisson).  
+                Model ini menghitung:
+                - *ρ (Utilisasi):* Tingkat kesibukan server  
+                - *L dan Lq:* Rata-rata jumlah pelanggan  
+                - *W dan Wq:* Rata-rata waktu tunggu  
+                
+                *Variabel:*
+                - λ: Tingkat kedatangan
+                - μ: Tingkat pelayanan
                 """)
-                st.latex(r''' \rho = \frac{\lambda}{\mu} \quad | \quad L = \frac{\rho}{1 - \rho} \quad | \quad W = \frac{L}{\lambda} ''')
+                st.latex(r"\rho = \frac{\lambda}{\mu} \quad L = \frac{\rho}{1 - \rho} \quad L_q = \frac{\rho^2}{1 - \rho}")
+                st.latex(r"W = \frac{L}{\lambda} \quad W_q = \frac{L_q}{\lambda}")
 
             if mu <= lmbda:
                 st.error("Tingkat pelayanan (μ) harus lebih besar dari tingkat kedatangan (λ) agar antrian stabil.")
@@ -41,36 +46,36 @@ def model_antrian():
             W = L / lmbda
             Wq = Lq / lmbda
 
-            with st.expander("Lihat Proses Perhitungan"):
-                st.latex(fr"\rho = \frac{{{lmbda}}}{{{mu}}} = {rho:.2f}")
-                st.latex(fr"L = \frac{{{rho:.2f}}}{{1 - {rho:.2f}}} = {L:.2f}")
-                st.latex(fr"L_q = \frac{{{rho:.2f}^2}}{{1 - {rho:.2f}}} = {Lq:.2f}")
-                st.latex(fr"W = \frac{{{L:.2f}}}{{{lmbda}}} = {W:.3f} \text{{ jam, atau }} {W*60:.2f} \text{{ menit}}")
-                st.latex(fr"W_q = \frac{{{Lq:.2f}}}{{{lmbda}}} = {Wq:.3f} \text{{ jam, atau }} {Wq*60:.2f} \text{{ menit}}")
+            with st.expander("📐 Lihat Proses Perhitungan (Contoh Kasus)"):
+                st.latex(fr"\rho = \frac{{{lmbda}}}{{{mu}}} = {rho:.2f} \quad \text{{(Utilisasi)}}")
+                st.latex(fr"L = \frac{{{rho:.2f}}}{{1 - {rho:.2f}}} = {L:.2f} \text{{ mobil di sistem}}")
+                st.latex(fr"L_q = \frac{{{rho:.2f}^2}}{{1 - {rho:.2f}}} = {Lq:.2f} \text{{ mobil di antrian}}")
+                st.latex(fr"W = \frac{{{L:.2f}}}{{{lmbda}}} = {W:.3f} \text{{ jam}} \approx {W*60:.2f} \text{{ menit}}")
+                st.latex(fr"W_q = \frac{{{Lq:.2f}}}{{{lmbda}}} = {Wq:.3f} \text{{ jam}} \approx {Wq*60:.2f} \text{{ menit}}")
 
     with col2:
         st.subheader("💡 Hasil dan Wawasan Bisnis")
-        st.success(f"Rekomendasi: Dengan tingkat pelayanan saat ini, rata-rata pelanggan akan menunggu {Wq*60:.1f} menit dalam antrian.")
+        st.success(f"Rata-rata pelanggan menunggu sekitar {Wq*60:.1f} menit di antrian.")
 
         col1_res, col2_res = st.columns(2)
         with col1_res:
             st.metric(label="🚗 Rata-rata Mobil di Sistem (L)", value=f"{L:.2f} mobil")
             st.metric(label="⏳ Rata-rata Total Waktu (W)", value=f"{W*60:.2f} menit")
         with col2_res:
-            st.metric(label="🚗 Rata-rata Panjang Antrian (Lq)", value=f"{Lq:.2f} mobil")
-            st.metric(label="⏳ Rata-rata Waktu Tunggu (Wq)", value=f"{Wq*60:.2f} menit")
+            st.metric(label="🚗 Panjang Antrian (Lq)", value=f"{Lq:.2f} mobil")
+            st.metric(label="⏳ Waktu Tunggu (Wq)", value=f"{Wq*60:.2f} menit")
 
         with st.container(border=True):
-            st.markdown("Analisis Kinerja Sistem:")
+            st.markdown("📊 Analisis Kinerja Sistem:")
             if rho > 0.85:
-                st.error(f"- Kondisi Kritis ({rho:.1%}): Tingkat kesibukan sangat tinggi. Waktu tunggu panjang bisa merusak reputasi.")
+                st.error(f"- Kritis ({rho:.1%}): Pelayanan sangat sibuk. Risiko ketidakpuasan pelanggan tinggi.")
             elif rho > 0.7:
-                st.warning(f"- Perlu Diwaspadai ({rho:.1%}): Sistem cukup sibuk dan bisa kewalahan saat lonjakan pelanggan.")
+                st.warning(f"- Cukup Sibuk ({rho:.1%}): Perlu dipantau. Tambah staf saat jam ramai bisa membantu.")
             else:
-                st.info(f"- Kinerja Sehat ({rho:.1%}): Sistem terkendali.")
+                st.info(f"- Efisien ({rho:.1%}): Sistem berjalan lancar.")
 
     # Pie Chart
-    st.markdown("#### Visualisasi Kinerja Antrian")
+    st.markdown("#### Visualisasi Komposisi Waktu")
     fig1, ax1 = plt.subplots(figsize=(8, 4))
     waktu_pelayanan_menit = (1 / mu) * 60
     waktu_tunggu_menit = Wq * 60
@@ -109,14 +114,14 @@ def model_antrian():
         with st.container(border=True):
             st.markdown("🔍 Penjelasan Grafik:")
             st.markdown("""
-            - Grafik Batang menunjukkan kemungkinan jumlah mobil yang ada di sistem (baik menunggu maupun dilayani).  
-            - Peluang semakin besar di kanan artinya sistem makin sering penuh atau antrian panjang terjadi.  
+            - Grafik batang menunjukkan seberapa besar kemungkinan terdapat n pelanggan di sistem.  
+            - Jika probabilitas tinggi di n besar, berarti antrian panjang sering terjadi.  
             """)
 
-    # Heatmap W vs rho (simulasi)
+    # Simulasi Heatmap Wq
     st.markdown("#### Simulasi Dampak Utilisasi (ρ) terhadap Waktu Tunggu")
     rho_vals = np.linspace(0.01, 0.95, 100)
-    Wq_vals = [(r**2) / (1 - r) / (r * mu) * 60 for r in rho_vals]  # dalam menit
+    Wq_vals = [(r**2) / (1 - r) / (r * mu) * 60 for r in rho_vals]  # menit
 
     fig3, ax3 = plt.subplots(figsize=(10, 3))
     ax3.plot(rho_vals, Wq_vals, color='tomato')
@@ -126,5 +131,5 @@ def model_antrian():
     ax3.grid(True)
     st.pyplot(fig3)
 
-# ⬇⬇⬇ WAJIB UNTUK MEMUNCULKAN APLIKASI
-model_antrian()
+# ⬇ WAJIB untuk memunculkan halaman
+model_antrian() 

@@ -85,14 +85,13 @@ def model_antrian():
         ax1.set_title("Bagaimana Pelanggan Menghabiskan Waktunya?")
         st.pyplot(fig1)
 
-        # Grafik Probabilitas Panjang Antrian (DIPERBAIKI)
+        # Grafik Probabilitas Panjang Antrian
         st.markdown("#### Probabilitas Panjang Antrian")
-        n_values = np.arange(0, 15)  # n dari 0 sampai 14
-        p_n_values = [(1 - rho) * (rho ** n) for n in n_values]  # tetap dalam urutan wajar
+        n_values = np.arange(0, 15)
+        p_n_values = [(1 - rho) * (rho ** n) for n in n_values]
 
         fig2, ax2 = plt.subplots(figsize=(10, 4))
         ax2.bar(n_values, p_n_values, color='skyblue')
-
         ax2.set_xlabel('Jumlah Mobil dalam Sistem (n)')
         ax2.set_ylabel('Probabilitas P(n)')
         ax2.set_title('Seberapa Mungkin Antrian Menjadi Panjang?')
@@ -106,3 +105,7 @@ def model_antrian():
             - *Grafik Pie:* Menunjukkan proporsi waktu pelanggan dalam sistem (menunggu vs dilayani).
             - *Grafik Batang:* Probabilitas jumlah mobil dalam sistem. Jika bar kanan tinggi, antrian panjang sering terjadi.
             """)
+
+# ✅ Agar aplikasi muncul saat dijalankan
+if __name__ == "__main__":
+    model_antrian()

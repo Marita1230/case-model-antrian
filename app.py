@@ -11,7 +11,7 @@ def model_antrian():
 
     with col1:
         st.markdown("""
-        *Skenario Bisnis:*  
+        Skenario Bisnis:  
         Manajemen 'Ayam Goreng Juara' ingin menganalisis efisiensi layanan drive-thru untuk menyeimbangkan biaya operasional dan kepuasan pelanggan (waktu tunggu).
         """)
 
@@ -24,9 +24,9 @@ def model_antrian():
                 st.markdown("""
                 Model antrian M/M/1 digunakan untuk menganalisis sistem dengan satu server (pelayan).  
                 Model ini membantu memahami metrik kinerja utama:
-                - *Utilisasi (ρ):* Seberapa sibuk server.  
-                - *Panjang Antrian (L, Lq):* Rata-rata jumlah pelanggan di sistem dan di antrian.  
-                - *Waktu Tunggu (W, Wq):* Lama rata-rata pelanggan di sistem dan dalam antrian.  
+                - Utilisasi (ρ): Seberapa sibuk server.  
+                - Panjang Antrian (L, Lq): Rata-rata jumlah pelanggan di sistem dan di antrian.  
+                - Waktu Tunggu (W, Wq): Lama rata-rata pelanggan di sistem dan dalam antrian.  
                 """)
                 st.latex(r''' \rho = \frac{\lambda}{\mu} \quad | \quad L = \frac{\rho}{1 - \rho} \quad | \quad W = \frac{L}{\lambda} ''')
 
@@ -50,7 +50,7 @@ def model_antrian():
 
     with col2:
         st.subheader("💡 Hasil dan Wawasan Bisnis")
-        st.success(f"Rekomendasi: Dengan tingkat pelayanan saat ini, rata-rata pelanggan akan menunggu *{Wq*60:.1f} menit* dalam antrian.")
+        st.success(f"Rekomendasi: Dengan tingkat pelayanan saat ini, rata-rata pelanggan akan menunggu {Wq*60:.1f} menit dalam antrian.")
 
         col1_res, col2_res = st.columns(2)
         with col1_res:
@@ -61,13 +61,13 @@ def model_antrian():
             st.metric(label="⏳ Rata-rata Waktu Tunggu (Wq)", value=f"{Wq*60:.2f} menit")
 
         with st.container(border=True):
-            st.markdown("*Analisis Kinerja Sistem:*")
+            st.markdown("Analisis Kinerja Sistem:")
             if rho > 0.85:
-                st.error(f"- *Kondisi Kritis ({rho:.1%})*: Tingkat kesibukan sangat tinggi. Waktu tunggu panjang bisa merusak reputasi.")
+                st.error(f"- Kondisi Kritis ({rho:.1%}): Tingkat kesibukan sangat tinggi. Waktu tunggu panjang bisa merusak reputasi.")
             elif rho > 0.7:
-                st.warning(f"- *Perlu Diwaspadai ({rho:.1%})*: Sistem cukup sibuk dan bisa kewalahan saat lonjakan pelanggan.")
+                st.warning(f"- Perlu Diwaspadai ({rho:.1%}): Sistem cukup sibuk dan bisa kewalahan saat lonjakan pelanggan.")
             else:
-                st.info(f"- *Kinerja Sehat ({rho:.1%})*: Sistem terkendali.")
+                st.info(f"- Kinerja Sehat ({rho:.1%}): Sistem terkendali.")
 
     # Pie Chart
     st.markdown("#### Visualisasi Kinerja Antrian")
@@ -109,7 +109,7 @@ def model_antrian():
         with st.container(border=True):
             st.markdown("🔍 Penjelasan Grafik:")
             st.markdown("""
-            - *Grafik Batang* menunjukkan kemungkinan jumlah mobil yang ada di sistem (baik menunggu maupun dilayani).  
+            - Grafik Batang menunjukkan kemungkinan jumlah mobil yang ada di sistem (baik menunggu maupun dilayani).  
             - Peluang semakin besar di kanan artinya sistem makin sering penuh atau antrian panjang terjadi.  
             """)
 
@@ -125,4 +125,6 @@ def model_antrian():
     ax3.set_title("Semakin Sibuk Sistem, Semakin Lama Pelanggan Menunggu")
     ax3.grid(True)
     st.pyplot(fig3)
-    
+
+# ⬇⬇⬇ WAJIB UNTUK MEMUNCULKAN APLIKASI
+model_antrian()

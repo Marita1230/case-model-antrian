@@ -84,13 +84,18 @@ def model_antrian():
         ax1.set_title("Bagaimana Pelanggan Menghabiskan Waktunya?")
         st.pyplot(fig1)
 
-        # Grafik Probabilitas Panjang Antrian (dibalik untuk visualisasi)
+        # Grafik Probabilitas Panjang Antrian (versi benar)
         st.markdown("#### Probabilitas Panjang Antrian")
         n_values = np.arange(0, 15)
-        p_n_values = np.linspace(0.01, 0.15, len(n_values))  # sengaja dibuat naik
+        p_n_values = [(1 - rho) * (rho ** n) for n in n_values]
 
         fig2, ax2 = plt.subplots(figsize=(10, 4))
-        ax2.bar(n_values, p_n_values, color='skyblue')
+        bars = ax2.bar(n_values, p_n_values, color='skyblue')
+
+        for bar, prob in zip(bars, p_n_values):
+            height = bar.get_height()
+            ax2.text(bar.get_x() + bar.get_width() / 2, height + 0.005, f"{prob:.1%}",
+                     ha='center', va='bottom', fontsize=8)
 
         ax2.set_xlabel('Jumlah Mobil dalam Sistem (n)')
         ax2.set_ylabel('Probabilitas P(n)')
@@ -103,7 +108,9 @@ def model_antrian():
             st.markdown("🔍 Penjelasan Grafik:")
             st.markdown("""
             - *Grafik Pie:* Menunjukkan proporsi waktu pelanggan dalam sistem (menunggu vs dilayani).
-            - *Grafik Batang:* Probabilitas jumlah mobil dalam sistem. Jika bar kanan tinggi, antrian panjang sering terjadi.
+            - *Grafik Batang:* Menampilkan probabilitas jumlah mobil dalam sistem (`P(n)`) berdasarkan teori M/M/1.
+              Semakin ke kanan (n bertambah), probabilitasnya menurun. Ini menunjukkan bahwa semakin panjang antrian,
+              semakin kecil kemungkinannya terjadi — selama sistem dalam kondisi stabil (μ > λ).
             """)
 
 # Agar aplikasi Streamlit bisa dijalankan langsung

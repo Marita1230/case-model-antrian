@@ -1,4 +1,3 @@
-
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
@@ -85,7 +84,7 @@ def model_antrian():
         ax1.set_title("Bagaimana Pelanggan Menghabiskan Waktunya?")
         st.pyplot(fig1)
 
-        # Grafik Probabilitas Panjang Antrian (tanpa persen)
+        # Grafik Probabilitas Panjang Antrian (versi benar)
         st.markdown("#### Probabilitas Panjang Antrian")
         n_values = np.arange(0, 15)
         p_n_values = [(1 - rho) * (rho ** n) for n in n_values]
@@ -95,7 +94,7 @@ def model_antrian():
 
         for bar, prob in zip(bars, p_n_values):
             height = bar.get_height()
-            ax2.text(bar.get_x() + bar.get_width() / 2, height + 0.005, f"{prob:.3f}",
+            ax2.text(bar.get_x() + bar.get_width() / 2, height + 0.005, f"{prob:.1%}",
                      ha='center', va='bottom', fontsize=8)
 
         ax2.set_xlabel('Jumlah Mobil dalam Sistem (n)')
@@ -115,5 +114,5 @@ def model_antrian():
             """)
 
 # Agar aplikasi Streamlit bisa dijalankan langsung
-if __name__ == "__main__":
+if _name_ == "_main_":
     model_antrian()

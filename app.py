@@ -115,3 +115,4 @@ def model_antrian():
 # Agar aplikasi Streamlit bisa dijalankan
 if __name__ == "__main__":
     model_antrian()
+

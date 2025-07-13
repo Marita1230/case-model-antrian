@@ -11,7 +11,7 @@ def model_antrian():
 
     with col1:
         st.markdown("""
-        *Skenario Bisnis:*
+        **Skenario Bisnis:**
         Manajemen 'Ayam Goreng Juara' ingin menganalisis efisiensi layanan drive-thru untuk menyeimbangkan biaya operasional dan kepuasan pelanggan (waktu tunggu).
         """)
 
@@ -23,12 +23,12 @@ def model_antrian():
         with st.expander("Penjelasan Rumus Model: Antrian M/M/1"):
             st.markdown("""
             Model antrian M/M/1 digunakan untuk menganalisis sistem dengan satu server (pelayan). Model ini membantu kita memahami metrik kinerja utama:
-            - Utilisasi (ρ): Seberapa sibuk server?
-            - Panjang Antrian (L, Lq): Rata-rata jumlah pelanggan dalam sistem atau antrian
-            - Waktu Tunggu (W, Wq): Berapa lama rata-rata pelanggan menunggu
+            - *Utilisasi (ρ):* Seberapa sibuk server?
+            - *Panjang Antrian (L, Lq):* Rata-rata jumlah pelanggan dalam sistem atau antrian
+            - *Waktu Tunggu (W, Wq):* Berapa lama rata-rata pelanggan menunggu
             """)
 
-            st.markdown("Variabel: $\lambda$ (Tingkat Kedatangan), $\mu$ (Tingkat Pelayanan)")
+            st.markdown("*Variabel:* $\lambda$ (Tingkat Kedatangan), $\mu$ (Tingkat Pelayanan)")
             st.latex(r'''\rho = \frac{\lambda}{\mu} \quad | \quad L = \frac{\rho}{1 - \rho} \quad | \quad W = \frac{L}{\lambda}''')
 
         if mu <= lmbda:
@@ -50,7 +50,7 @@ def model_antrian():
 
     with col2:
         st.subheader("💡 Hasil dan Wawasan Bisnis")
-        st.success(f"Rekomendasi: Dengan tingkat pelayanan saat ini, rata-rata pelanggan akan menunggu {Wq*60:.1f} menit dalam antrian.")
+        st.success(f"*Rekomendasi:* Dengan tingkat pelayanan saat ini, rata-rata pelanggan akan menunggu *{Wq*60:.1f} menit* dalam antrian.")
 
         col1_res, col2_res = st.columns(2)
         with col1_res:
@@ -61,13 +61,13 @@ def model_antrian():
             st.metric(label="⏳ Rata-rata Waktu Tunggu (Wq)", value=f"{Wq*60:.2f} menit")
 
         with st.container():
-            st.markdown("Analisis Kinerja Sistem:")
+            st.markdown("*Analisis Kinerja Sistem:*")
             if rho > 0.85:
-                st.error(f"- *Kondisi Kritis ({rho:.1%})*: Server terlalu sibuk.")
+                st.error(f"- **Kondisi Kritis ({rho:.1%})**: Server terlalu sibuk.")
             elif rho > 0.7:
-                st.warning(f"- Perlu Diwaspadai ({rho:.1%}): Sistem cukup sibuk.")
+                st.warning(f"- *Perlu Diwaspadai ({rho:.1%})*: Sistem cukup sibuk.")
             else:
-                st.info(f"- Kinerja Sehat ({rho:.1%}): Masih dalam batas aman.")
+                st.info(f"- *Kinerja Sehat ({rho:.1%})*: Masih dalam batas aman.")
 
         # Visualisasi Pie Chart
         st.markdown("#### Visualisasi Kinerja Antrian")
@@ -107,12 +107,12 @@ def model_antrian():
         with st.container():
             st.markdown("🔍 Penjelasan Grafik:")
             st.markdown("""
-            - Grafik Pie: Menunjukkan proporsi waktu pelanggan dalam sistem (menunggu vs dilayani).
-            - Grafik Batang: Menampilkan probabilitas jumlah mobil dalam sistem (P(n)) berdasarkan teori M/M/1.
+            - *Grafik Pie:* Menunjukkan proporsi waktu pelanggan dalam sistem (menunggu vs dilayani).
+            - *Grafik Batang:* Menampilkan probabilitas jumlah mobil dalam sistem (`P(n)`) berdasarkan teori M/M/1.
               Semakin ke kanan (n bertambah), probabilitasnya menurun. Ini menunjukkan bahwa semakin panjang antrian,
               semakin kecil kemungkinannya terjadi — selama sistem dalam kondisi stabil (μ > λ).
             """)
 
 # Agar aplikasi Streamlit bisa dijalankan langsung
-if _name_ == "_main_":
+if __name__ == "__main__":
     model_antrian()

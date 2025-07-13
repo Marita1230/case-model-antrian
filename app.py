@@ -35,7 +35,6 @@ def model_antrian():
             st.error("Tingkat pelayanan (μ) harus lebih besar dari tingkat kedatangan (λ) agar antrian stabil.")
             return
 
-        # Perhitungan utama
         rho = lmbda / mu
         L = rho / (1 - rho)
         Lq = (rho**2) / (1 - rho)
@@ -85,17 +84,24 @@ def model_antrian():
         ax1.set_title("Bagaimana Pelanggan Menghabiskan Waktunya?")
         st.pyplot(fig1)
 
-        # Grafik Probabilitas Panjang Antrian
-        st.markdown("#### Probabilitas Panjang Antrian")
+        # Grafik Probabilitas Panjang Antrian (dibalik untuk demo)
+        st.markdown("#### Probabilitas Panjang Antrian (Visual Dibalik)")
         n_values = np.arange(0, 15)
-        p_n_values = [(1 - rho) * (rho ** n) for n in n_values]
+        p_n_values = np.linspace(0.01, 0.15, len(n_values))  # nilai naik
 
         fig2, ax2 = plt.subplots(figsize=(10, 4))
-        ax2.bar(n_values, p_n_values, color='skyblue')
+        bars = ax2.bar(n_values, p_n_values, color='skyblue')
+
+        for bar, prob in zip(bars, p_n_values):
+            height = bar.get_height()
+            ax2.text(bar.get_x() + bar.get_width() / 2, height + 0.005, f"{prob:.1%}",
+                     ha='center', va='bottom', fontsize=8)
+
         ax2.set_xlabel('Jumlah Mobil dalam Sistem (n)')
         ax2.set_ylabel('Probabilitas P(n)')
-        ax2.set_title('Seberapa Mungkin Antrian Menjadi Panjang?')
+        ax2.set_title('Simulasi: Batang “Kebalik”')
         ax2.set_xticks(n_values)
+        ax2.set_ylim(0, max(p_n_values) * 1.25)
         ax2.grid(True, axis='y', linestyle='--')
         st.pyplot(fig2)
 
@@ -103,9 +109,9 @@ def model_antrian():
             st.markdown("🔍 Penjelasan Grafik:")
             st.markdown("""
             - *Grafik Pie:* Menunjukkan proporsi waktu pelanggan dalam sistem (menunggu vs dilayani).
-            - *Grafik Batang:* Probabilitas jumlah mobil dalam sistem. Jika bar kanan tinggi, antrian panjang sering terjadi.
+            - *Grafik Batang:* Visualisasi ini sengaja dibalik untuk eksplorasi — probabilitas naik seiring jumlah mobil. Dalam kenyataan, sistem antrian normal akan menghasilkan grafik menurun.
             """)
 
-# ✅ Agar aplikasi muncul saat dijalankan
+# Agar aplikasi Streamlit bisa dijalankan
 if __name__ == "__main__":
     model_antrian()
